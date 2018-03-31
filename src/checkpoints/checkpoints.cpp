@@ -90,11 +90,13 @@ namespace cryptonote
   //---------------------------------------------------------------------------
   bool checkpoints::is_in_checkpoint_zone(uint64_t height) const
   {
+    return false;
     return !m_points.empty() && (height <= (--m_points.end())->first);
   }
   //---------------------------------------------------------------------------
   bool checkpoints::check_block(uint64_t height, const crypto::hash& h, bool& is_a_checkpoint) const
   {
+    return true;
     auto it = m_points.find(height);
     is_a_checkpoint = it != m_points.end();
     if(!is_a_checkpoint)
@@ -135,9 +137,9 @@ namespace cryptonote
   //---------------------------------------------------------------------------
   uint64_t checkpoints::get_max_height() const
   {
-    std::map< uint64_t, crypto::hash >::const_iterator highest = 
+    std::map< uint64_t, crypto::hash >::const_iterator highest =
         std::max_element( m_points.begin(), m_points.end(),
-                         ( boost::bind(&std::map< uint64_t, crypto::hash >::value_type::first, _1) < 
+                         ( boost::bind(&std::map< uint64_t, crypto::hash >::value_type::first, _1) <
                            boost::bind(&std::map< uint64_t, crypto::hash >::value_type::first, _2 ) ) );
     return highest->first;
   }
@@ -161,6 +163,7 @@ namespace cryptonote
 
   bool checkpoints::init_default_checkpoints(network_type nettype)
   {
+    return true;
     if (nettype == TESTNET)
     {
       ADD_CHECKPOINT(0,     "48ca7cd3c8de5b6a4d53d2861fbdaedca141553559f9be9520068053cda8430b");
@@ -207,7 +210,7 @@ namespace cryptonote
     ADD_CHECKPOINT(1390000, "a8f5649dd4ded60eedab475f2bec8c934681c07e3cf640e9be0617554f13ff6c");
     ADD_CHECKPOINT(1450000, "ac94e8860093bc7c83e4e91215cba1d663421ecf4067a0ae609c3a8b52bcfac2");
     ADD_CHECKPOINT(1530000, "01759bce497ec38e63c78b1038892169203bb78f87e488172f6b854fcd63ba7e");
-    
+
 
     return true;
   }
@@ -250,6 +253,7 @@ namespace cryptonote
 
   bool checkpoints::load_checkpoints_from_dns(network_type nettype)
   {
+    return true;
     std::vector<std::string> records;
 
     // All four MoneroPulse domains have DNSSEC on and valid
@@ -307,7 +311,8 @@ namespace cryptonote
   bool checkpoints::load_new_checkpoints(const std::string &json_hashfile_fullpath, network_type nettype, bool dns)
   {
     bool result;
-
+    result = true;
+    return result;
     result = load_checkpoints_from_json(json_hashfile_fullpath);
     if (dns)
     {
